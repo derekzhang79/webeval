@@ -16,21 +16,13 @@ from config.apikeys.reCaptcha import *
 from config.apikeys.twitter import *
 from config.filesystem import *
 
-if socket.gethostname() != 'webeval':
-    DEBUG = True
-    TEMPLATE_DEBUG = DEBUG
-    ENVIRONMENT = 'Development'
-    CELERY_ALWAYS_EAGER = True
-    DATABASES = config.databases.DEVELOPMENT
-    HOST_URL  = 'http://localhost'
-    MEDIA_HOST_URL = "%s:8000/static" % HOST_URL
-else:
-    DEBUG = True
-    TEMPLATE_DEBUG = DEBUG
-    ENVIRONMENT = 'Production'
-    DATABASES = config.databases.PRODUCTION
-    HOST_URL  = 'http://localhost'
-    MEDIA_HOST_URL = "%s:8000/static" % HOST_URL
+ENVIRONMENT = env('DJANGO_ENV')
+DEBUG = ENVIRONMENT != 'production'
+TEMPLATE_DEBUG = DEBUG
+CELERY_ALWAYS_EAGER = True
+DATABASES = config.databases.SETTINGS[ENVIRONMENT]
+HOST_URL  = env('HOST_URL')
+MEDIA_HOST_URL = "%s:8000/static" % HOST_URL
 
 PROJECT_DIRECTORY = os.path.dirname(__file__)
 
@@ -47,12 +39,7 @@ USE_I18N = True
 USE_L10N = True
 
 # Ip's allowed to connect to API
-INTERNAL_IPS=(
-    '127.0.0.1',
-    '192.168.2.102',
-    '192.168.2.103',
-    '192.168.2.104'
-)
+INTERNAL_IPS = env('INTERNAL_IPS').split(',')
 
 MEDIA_ROOT = ''
 MEDIA_URL = ''
@@ -143,8 +130,8 @@ KEEP_LOGGED_KEY      = 'keep_me_logged' # session key
 KEEP_LOGGED_DURATION = 14               # in days
 
 CELERY_RESULT_BACKEND = "database"
-os.environ["CELERY_LOADER"] = "django"
-BROKER_URL = "amqp://guest:guest@localhost:5672//"
+# os.environ["CELERY_LOADER"] = "django"
+BROKER_URL=env("BROKER_URL")
 #CACHE_BACKEND = ''
 #CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
