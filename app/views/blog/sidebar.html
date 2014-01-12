@@ -1,0 +1,31 @@
+<div class="well sidebar-nav">
+  <h4>Latest entries</h4>
+  <ul class="nav nav-list">
+    {% for entryit in last_blog_entries %}
+      <li>
+        <a class="btn" href="{% url display_entry username=entryit.author.username permalink=entryit.permalink %}">
+          {{ entryit.title }}
+        </a>
+      </li><br/>
+    {% endfor %}
+  </ul>
+
+  {% if request.user.is_authenticated %}
+    {% if request.user.userprofile.blogrollentry_set.all.count %}
+      <h4>My blogroll</h4>
+      <ul class="nav nav-list">
+        {% for entry_it in request.user.userprofile.blogrollentry_set.all %}
+        <li>
+          <a class="btn" href="{{ entry_it.link }}">{{ entry_it.name }}</a>
+        </li></br>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <h4>Panel</h4>
+    <ul class="nav nav-list">
+      <li><a class="btn" href="{% url new_entry %}">New Post</a></li><br/>
+      <li><a class="btn" href="{% url blog_posts username=request.user.username %}">My blog</a></li><br/>
+    </ul>
+  {% endif %}
+</div>

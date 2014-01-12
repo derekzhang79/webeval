@@ -1,0 +1,89 @@
+{% extends "webEval_base.html" %}
+{% load wiki_extras %}
+{% load util_tags %}
+{% load markup %}
+
+
+{% block title %} {{ revision.title }} {% endblock %}
+
+{% block navigation %}
+	<ul>
+	<li class="first active"><a accesskey="e" href="{% url display_page page_url=revision.wiki_page.url %}"><span class="access-key">V</span>iew</a></li>
+    {% if can_edit %}
+        <li><a accesskey="e" href="{% url edit_wiki_page page_url=revision.wiki_page.url %}"><span class="access-key">E</span>dit</a></li>
+        <li><a accesskey="c" href="{% url copy_wiki_page page_url=revision.wiki_page.url %}"><span class="access-key">C</span>opy</a></li>
+        <li><a accesskey="m" href="{% url move_wiki_page page_url=revision.wiki_page.url %}"><span class="access-key">M</span>ove</a></li>
+    {% endif %}
+    {% if can_attach %}
+        <li><a accesskey="a" href="{% url attach page_url=revision.wiki_page.url  %}"><span class="access-key">A</span>ttach</a></li>
+    {% endif %}
+        <li><a accesskey="h" href="{% url wiki_history page_url=revision.wiki_page.url %}"><span class="access-key">H</span>istory</a></li>
+        <li class="last"><a accesskey="v" href="{% url attachments page_url=revision.wiki_page.url %}"><span class="access-key">V</span>iew attachments</a></li>
+	</ul>
+{% endblock %}
+
+{% block wiki_page %}
+
+{% if widgets.is_user %}
+	{% with widgets.user as user %}
+		{% include "wiki/user_header.html" %}
+	{% endwith %}
+{% endif %}
+
+{% if widgets.is_problem %}
+	<ul class="htabs">
+		<li class="active">
+		    <a href="{% url display_problem problem_code=widgets.problem.code %}">Problem {{ widgets.problem.code }}</a>
+		</li>
+		{% if request.user.is_authenticated %}
+		<li >
+		    <a href="{% url grader_status %}?problem={{ widgets.problem.code }}&user={{ request.user }}">My submissions</a>
+		</li>
+		{% endif %}
+		<li >
+		    <a href="{% url grader_status %}?problem={{ widgets.problem.code }}&score_begin=100">Accepted submissions</a>
+		</li>
+		<li >
+		    <a href="{% url grader_status %}?problem={{ widgets.problem.code }}">All submissions</a>
+		</li>
+
+	</ul>
+	{% with widgets.problem as problem %}
+		{% include "wiki/problem_header.html" %}
+	{% endwith %}
+{% endif %}
+
+{% if message %}
+    {% include "include_template.html" %}
+{% endif %}
+
+<div class="trac-modifiedby">
+	<a href="{% url wiki_history page_url=revision.wiki_page.url %}"
+	   title="Version {{ revision.revision_id }} by {{ revision.author.username }}">Last modified
+	</a>
+	<a class="timeline"
+	   href="{% url wiki_history page_url=revision.wiki_page.url %}"
+	   title="{{ revision.date }} in Timeline">{{ revision.date|timedelta }}
+	</a> ago
+</div>
+
+<div class="wiki-content">
+{% if revision.markup_type == 'T' %}
+    {{ revision.content|textile|safe }}
+{% endif %}
+{% if revision.markup_type == 'C' %}
+    {{ revision.content|creole|safe }}
+{% endif %}
+</div>
+
+{% if widgets.is_problem %}
+	{% with widgets.problem as problem %}
+		{% include "wiki/problem_submit_form.html" %}
+	{% endwith %}
+{% endif %}
+{% if widgets.is_contest %}
+	{% with widgets.contest as contest %}
+		{% include "wiki/contest_display.html" %}
+	{% endwith %}
+{% endif %}
+{% endblock %}

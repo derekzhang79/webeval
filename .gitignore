@@ -1,0 +1,16 @@
+*.pyc
+.*.swp
+db.sqlite
+db/dev.sqlite3
+media/*
+tmp/*
+log/*
+public/static/*
+*nohup.out
+.achievements
+files/tests/*
+/.env
+/public/images/avatar/*
+/files/attachments/*
+/files/jobs/*
+.#*

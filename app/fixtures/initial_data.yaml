@@ -1,0 +1,7 @@
+- fields: {description: Forum Index, last_post: null, name: webEval, parent_board: null,
+    posts: 0, public: true, topics: 0}
+  model: app.forumboard
+  pk: 1
+- fields: {code: Teodor_Pripoae, name: Teodor Pripoae}
+  model: app.author
+  pk: 1
