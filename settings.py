@@ -44,20 +44,21 @@ INTERNAL_IPS = env('INTERNAL_IPS').split(',')
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
+STATIC_ROOT = 'public'
 STATIC_URL = '/static/'
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_DIRECTORY, 'public'),
+    os.path.join(PROJECT_DIRECTORY),
 )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder'
 )
 
-SECRET_KEY = '5jrnc_-&v-*$3f25tzo#czzzf3!u*yqy8q8k-y1()#sqz0yo*!'
+SECRET_KEY = env('SECRET_KEY')
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -117,6 +118,7 @@ INSTALLED_APPS = (
     'captcha',
     'django_nose',
     'annoying',
+    'static_precompiler',
     'app',
 )
 
@@ -134,6 +136,9 @@ CELERY_RESULT_BACKEND = "database"
 BROKER_URL=env("BROKER_URL")
 #CACHE_BACKEND = ''
 #CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+
+SCSS_EXECUTABLE="sass"
+STATIC_PRECOMPILER_OUTPUT_DIR="compiled"
 
 LOGGING = {
     'version': 1,

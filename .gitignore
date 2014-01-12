@@ -14,3 +14,5 @@ files/tests/*
 /files/attachments/*
 /files/jobs/*
 .#*
+.sass-cache
+/public/compiled

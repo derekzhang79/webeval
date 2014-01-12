@@ -1,0 +1,6 @@
+-r requirements.txt
+nose==1.1.2
+Fabric==1.6.0
+django-static-precompiler==0.2
+django-nose==1.1
+werkzeug==0.8.3
