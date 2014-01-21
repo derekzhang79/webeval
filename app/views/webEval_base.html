@@ -7,7 +7,7 @@
       {% block title %} The webEval Project {% endblock %}
     </title>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/vendor/semantic.css" type="text/css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/semantic.css" type="text/css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "stylesheets/main.scss" %}" type="text/css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/ui-lightness/jquery-ui-1.8.13.custom.css" type="text/css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/form_popup.css" type="text/css"/>
@@ -16,44 +16,51 @@
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery-ui-1.8.13.custom.min.js"></script>
   </head>
   <body>
-    <div id="form-login" title="Login" style="display: none;">
-    </div>
+    <!-- <div id="form-login" title="Login" style="display: none;"> -->
+    <!-- </div> -->
 
-    <div id="form-register" title="Register" style="display: none;">
-    </div>
+    <!-- <div id="form-register" title="Register" style="display: none;"> -->
+    <!-- </div> -->
 
 
     <div id="wrapper">
-      <div id="topbar">
-        <a id="home-link" href="/">webEval</a>
-      </div>
+      <div class="ui teal inverted menu">
+        <div class="menu">
+          <a class="item">
+            <i class="home icon"></i>
+            Home
+          </a>
+          <a class="item{% if navigation.main == 'judge' %} active{% endif %}" href="{% url display_all_contests %}">
+            <i class="trophy icon"></i>
+            Judge
+          </a>
 
-      <div id="ew-header">
-        <div id="topnav">
-          <ul>
-            <li {% if navigation.main == "judge" %}class="active"{% endif %}>
-              <a href="{% url display_all_contests %}">Judge</a>
-            </li>
+          <a class="item{% if navigation.main == 'blog' %} active{% endif %}" href="{% url blog_posts %}">
+            <i class="rss sign icon"></i>
+            Blog
+          </a>
 
-            <li {% if navigation.main == "blog" %}class="active"{% endif %}>
-              <a href="{% url blog_posts %}">Blog</a>
-            </li>
+          <script type="text/javascript" src="{{ STATIC_URL }}javascripts/auth_menu.js"></script>
 
-            <script type="text/javascript" src="{{ STATIC_URL }}javascripts/auth_menu.js"></script>
+          <a class="item{% if navigation.main == 'forum' %} active{% endif %}" href="{% url display_board board_id=1 %}">
+            <i class="chat outline icon"></i>
+            Forum
+          </a>
 
-            <li {% if navigation.main == "forum" %}class="active"{% endif %}>
-              <a href="{% url display_board board_id=1 %}">Forum</a>
-            </li>
+          <a class="item{% if navigation.main == "wiki" %} active{% endif %}" href="{% url wiki_index %}">
+            Wiki
+          </a>
+          {% if request.user.is_superuser %}
+            <a class="item {% if navigation.main == 'admin' %} active{% endif %}" href="{% url admin_page %}">
+              <i class="settings icon"></i>
+              Admin
+            </a>
+          {% endif %}
 
-            <li {% if navigation.main == "wiki" %}class="active"{% endif %}>
-              <a href="{% url wiki_index %}">Wiki</a>
-            </li>
-            {% if request.user.is_superuser %}
-              <li {% if navigation.main == "admin" %}class="active"{% endif %}>
-                <a href="{% url admin_page %}">Admin</a>
-              </li>
-            {% endif %}
-          </ul>
+            <div class="right menu">
+              <div class="ui dropdown item">
+              </div>
+            </div>
         </div>
       </div>
 
